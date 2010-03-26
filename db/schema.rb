@@ -9,9 +9,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100325193052) do
+ActiveRecord::Schema.define(:version => 20100326153931) do
+
+  create_table "weakness_relationships", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "child_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "weaknesses", :force => true do |t|
+    t.string   "name"
+    t.integer  "type"
+    t.integer  "count"
+    t.float    "score"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
