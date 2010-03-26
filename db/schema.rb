@@ -9,22 +9,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100326153931) do
+ActiveRecord::Schema.define(:version => 20100326175713) do
+
+  create_table "vulnerabilities", :force => true do |t|
+    t.integer  "weakness_id"
+    t.decimal  "score",       :precision => 3, :scale => 1
+    t.datetime "published"
+    t.datetime "modified"
+  end
 
   create_table "weakness_relationships", :force => true do |t|
-    t.integer  "parent_id"
-    t.integer  "child_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer "parent_id"
+    t.integer "child_id"
   end
 
   create_table "weaknesses", :force => true do |t|
-    t.string   "name"
-    t.integer  "type"
-    t.integer  "count"
-    t.float    "score"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string  "name"
+    t.integer "weakness_type"
+    t.integer "count"
+    t.float   "score"
   end
 
 end

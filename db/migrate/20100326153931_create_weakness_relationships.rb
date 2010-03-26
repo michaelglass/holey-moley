@@ -3,7 +3,6 @@ class CreateWeaknessRelationships < ActiveRecord::Migration
     create_table :weakness_relationships do |t|
       t.references :parent
       t.references :child
-      t.timestamps
     end
   end
 

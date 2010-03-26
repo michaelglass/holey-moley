@@ -5,7 +5,6 @@ class CreateWeaknesses < ActiveRecord::Migration
       t.integer   :weakness_type
       t.integer   :count
       t.float     :score
-      t.timestamps
     end
   end
 

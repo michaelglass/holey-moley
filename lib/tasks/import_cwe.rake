@@ -4,7 +4,7 @@ namespace :db do
       desc 'import cwe data into database'
       task 'cwe' => :environment do
         Crewait.start_waiting
-        node = XML::Parser.file('static_data/cwec_v1.8.xml').parse.child
+        node = XML::Parser.file('static_data/cwe/cwec_v1.8.xml').parse.child
         
         node.each do |category_node|
           category_node.each_element do |weakness|
