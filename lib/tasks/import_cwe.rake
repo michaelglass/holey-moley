@@ -11,7 +11,7 @@ namespace :db do
             category = Weakness::WEAKNESS_IDS[weakness.name]
             name = weakness['Name']
             id = weakness['ID']
-            Weakness.crewait(:id => id, :name => name, :type => category)
+            Weakness.crewait(:id => id, :name => name, :weakness_type => category)
             
             weakness.each_element do |relationships|
               if relationships.name == "Relationships"
@@ -27,7 +27,7 @@ namespace :db do
                   
                   if relationship_type == "ChildOf"
                     # puts "found a childof relationship!"
-                    WeaknessRelationship.crewait(:parent_id => id, :child_id => relationship_id)
+                    WeaknessRelationship.crewait(:parent_id => relationship_id, :child_id => id)
                   end                  
                 end
                 break #we're done with relationships, no need to parse the rest of this node
