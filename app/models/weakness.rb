@@ -9,5 +9,6 @@ class Weakness < ActiveRecord::Base
                                   :dependent => :destroy
     
   has_many :children,             :through => :parent_relationships
-    
+  
+  WEAKNESS_IDS = {'View' => 0, 'Category' => 1, 'Weakness' => 2, 'Compound_Element' => 3}
 end
