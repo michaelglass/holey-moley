@@ -9,7 +9,7 @@ namespace :db do
         timer_start = Time.now
         nvd_prefix = "static_data/nvd/nvdcve-2.0-20"
         nvd_suffix = ".xml"
-        nvd_middles = ['04']#['02', '03', '04', '05', '06', '07', '08', '09', '10']
+        nvd_middles = ['02', '03', '04', '05', '06', '07', '08', '09', '10']
         
         nvd_middles.each do |year|
           node = XML::Parser.file(nvd_prefix + year + nvd_suffix).parse.child
