@@ -9,7 +9,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100326175713) do
+ActiveRecord::Schema.define(:version => 20100408133720) do
+
+  create_table "suites", :force => true do |t|
+    t.integer  "top"
+    t.date     "start"
+    t.date     "end"
+    t.float    "weight"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tests", :force => true do |t|
+    t.integer  "suite_id"
+    t.integer  "weakness_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "vulnerabilities", :force => true do |t|
     t.integer  "weakness_id"

@@ -1,0 +1,12 @@
+<h1>Editing suite</h1>
+
+<% form_for(@suite) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @suite %> |
+<%= link_to 'Back', suites_path %>

@@ -1,0 +1,26 @@
+<h1>New suite</h1>
+
+<% form_for(@suite) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    How many top vulnerabilities do you want?
+    <%= f.text_field :top %>
+  </p>
+  <p>
+    start:
+    <%= f.date_select :start, :start_year => 2002, :end_year => 2010 %>
+  </p>
+  <p>
+    end: 
+    <%= f.date_select :end, :start_year => 2002, :end_year => 2010 %>
+  </p>
+  <p>
+    weight:
+    <%= f.text_field :weight %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', suites_path %>

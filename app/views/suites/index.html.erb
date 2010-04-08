@@ -1,0 +1,21 @@
+<h1>Listing suites</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% @suites.each do |suite| %>
+  <tr>
+    <td><%= suite.top%></td>
+    <td><%= suite.start%></td>
+    <td><%= suite.end%></td>
+    <td><%= link_to 'Show', suite %></td>
+    <td><%= link_to 'Edit', edit_suite_path(suite) %></td>
+    <td><%= link_to 'Destroy', suite, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New suite', new_suite_path %>
