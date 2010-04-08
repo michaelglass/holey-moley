@@ -41,7 +41,22 @@ class SuitesController < ApplicationController
   # POST /suites.xml
   def create
     @suite = Suite.new(params[:suite])
-
+    vulnerabilities = Vulnerability.find(:all, :conditions => {:published => @suite.start..@suite.end } )
+    weaknesses = {}
+    averages = {}
+    vulnerabilities.each do |vulnerability|
+      if weaknesses.has_key? vulnerability.weakness
+        weaknesses[vulnerability.weakness].push vulnerability
+        #updated averages
+        averages[vulnerability.weakness] += vulnerability.score
+      else
+        weaknesses[vulnerability.weakness] = [vulnerability]
+        averages[vulnerability.weakness] = vulnerability.score
+        #set initial average...
+      end
+    end
+    averages.each { |k, v| averages[k] = v/weaknesses[k].size }
+    #now sort, choose top weaknesses...
     respond_to do |format|
       if @suite.save
         flash[:notice] = 'Suite was successfully created.'
