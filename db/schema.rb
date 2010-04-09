@@ -9,7 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100409185040) do
+ActiveRecord::Schema.define(:version => 20100409211129) do
+
+  create_table "histories", :force => true do |t|
+    t.integer  "suite_id"
+    t.string   "transition_name"
+    t.boolean  "final"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "suites", :force => true do |t|
     t.integer  "top"

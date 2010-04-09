@@ -1,6 +1,5 @@
-<?php
-require 'FSM.php';
- 
+<?php 
+session_start();
 #connect to database
 
 #TODO: READ FROM database.conf file.
@@ -9,8 +8,11 @@ $error = '';
 $body = '';
 
 $key = $_SERVER["REQUEST_URI"];
-if(preg_match("/([a-z]{10,10})\/?$/", $key, $matches))
+if(preg_match("^/([a-z]{10,10})(.*)?/", $key, $matches))
+{
   $key = $matches[0];
+  $url = $matches[1];
+}
 else
   $error .= "No key found.";
 
@@ -39,17 +41,30 @@ else
 # else
 #   $error .= "Error preparing statement";
 
+$suite_id = '';
+
+$query = "SELECT suite.id FROM suites WHERE suites.key = '$key'";
+if($result = $db->query($query)) {
+  while($row = $result->fetch_row())
+    foreach ($row as $value)
+      $suite_id = $value;
+}
+else
+  $error .= "<br/>backend error :(";#$query;
+
 $tests = array();
 
-$query = "SELECT tests.id FROM suites, tests WHERE tests.suite_id = suites.id AND suites.key = '$key'";
+$query = "SELECT tests.id FROM tests WHERE tests.suite_id = '$suite_id'";
 if($result = $db->query($query)) {
   while($row = $result->fetch_row())
     foreach ($row as $value)
       $tests[] = $value;
 }
 else
-  $error .= $query;
-$db->close();
+  $error .= "<br/>backend error :(";
+
+
+
 
 
 # 
@@ -58,7 +73,9 @@ $db->close();
 # once we have the state machine loaded...
 #now, just include first test...
 # require("tests/$tests[0].php");
-require ("tests/22.php") #this is for directory traversal...
+require ("tests/22.php"); #this is for directory traversal...
+
+$db->close();
 
 $title = "generic title";
 if(strlen($error) > 0)
