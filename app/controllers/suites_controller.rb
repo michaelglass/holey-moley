@@ -69,7 +69,7 @@ class SuitesController < ApplicationController
     ranks.sort! {|a, b| a[1] <=> b[1]}
 
 
-    rank_multiplier = 10.0/ranks.length
+    rank_multiplier = 10.0 / ranks.length
     
     ranks.each_with_index do |rank, index|
       weaknesses[rank[0]] = (index + 1) * rank_multiplier
@@ -89,6 +89,8 @@ class SuitesController < ApplicationController
       @suite.tests.build( :weakness_id => top_rated[0] )
     end
         
+    @suite.key = (0...10).map{ ('a'..'z').to_a[rand(26)] }.join
+    
     respond_to do |format|
       if @suite.save
         flash[:notice] = 'Suite was successfully created.'
