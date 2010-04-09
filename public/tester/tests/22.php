@@ -62,7 +62,7 @@ switch($state)
     $body = "..<br>this is a fake file structure<br>fer serious<br>";
 }
 
-$query = "INSERT INTO histories (suite_id, transition_name, final, created_at, updated_at) VALUES($suite_id, '$transition', $finals[$transition], NOW(), NOW() );";
+$query = "INSERT INTO histories (suite_id, transition_name, final, created_at, updated_at) VALUES($suite_id, '$transition', {$finals[$transition]}, NOW(), NOW() );";
 if($result = $db->query($query)) {
   if($row = $result->fetch_row())
     $last_transition = $row[0];
