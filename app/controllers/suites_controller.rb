@@ -69,7 +69,7 @@ class SuitesController < ApplicationController
     ranks.sort! {|a, b| a[1] <=> b[1]}
 
 
-    rank_multiplier = ranks.length/10.0
+    rank_multiplier = 10.0/ranks.length
     
     ranks.each_with_index do |rank, index|
       weaknesses[rank[0]] = (index + 1) * rank_multiplier
@@ -79,12 +79,13 @@ class SuitesController < ApplicationController
     
     weaknesses.each do |weakness, rank|
       score = rank * @suite.weight + averages[weakness] * (1.0 - @suite.weight)
+      logger.info "#{weakness}: #{averages[weakness]}, #{rank}, #{score}";
       ranks.push [weakness, score]
     end
     
     #now sort, choose top weaknesses...
     ranks.sort! {|a,b| b[1] <=> a[1]} #sorting highest to lowest.
-    ranks[0..@suite.top].each do |top_rated|
+    ranks[0...@suite.top].each do |top_rated|
       @suite.tests.build( :weakness_id => top_rated[0] )
     end
         
