@@ -1,31 +1,70 @@
 <?php
 require 'FSM.php';
  
-//connect to database
+#connect to database
 
-//TODO: READ FROM database.conf file.
-$db = new mysqli(‘localhost’,‘root’,‘’,‘database’); 
-
+#TODO: READ FROM database.conf file.
+$db = new mysqli('localhost','root','','holey_moley_dev'); 
+$error = '';
+$body = '';
 
 $key = $_SERVER["REQUEST_URI"];
 if(preg_match("/([a-z]{10,10})\/?$/", $key, $matches))
   $key = $matches[0];
 else
-  $key = -1;
-  
-//get suite, tests from database
+  $error .= "No key found.";
 
-/*
-$stmt = $db->prepare("SELECT test.id FROM suite, test WHERE test.id=suite.id AND suite.key=?"));
-$stmt->bind_param("s",$key);
+# get suite, tests from database
+# NO IDEA WHY THIS DOESNT WORK!!!!
+# if( $stmt = $db->prepare("SELECT tests.id FROM suites, tests WHERE tests.suite_id = suites.id AND suites.key = ?") ) {
+#   if(! $stmt->bind_param('s',$key ) );
+#   {
+#     $error .= "Error binding parameter";    
+#   }
+#   if(!$stmt->execute()){
+#     $error .= "Database error.";
+#   }
+# 
+#   if(!$stmt->bind_result($test))
+#     $error .= "Error binding result";
+# 
+#   while($result = $stmt->fetch()){
+#     if($result == false)
+#       $error .= "error fetching";
+#       
+#     $body .= $test."<br />";
+#   }
+#   $stmt->close();
+# }
+# else
+#   $error .= "Error preparing statement";
+
+$tests = array();
+
+$query = "SELECT tests.id FROM suites, tests WHERE tests.suite_id = suites.id AND suites.key = '$key'";
+if($result = $db->query($query)) {
+  while($row = $result->fetch_row())
+    foreach ($row as $value)
+      $tests[] = $value;
+}
+else
+  $error .= $query;
+$db->close();
 
 
-//for each test, require tests/test.php which includes the FSM
-//... realistically, we should merge our FSMs for each test... but maybe we won't do that for this project...
-//once we have the state machine loaded...
-*/
+# 
+# for each test, require tests/test.php which includes the FSM
+# ... realistically, we should merge our FSMs for each test... but maybe we won't do that for this project...
+# once we have the state machine loaded...
+#now, just include first test...
+# require("tests/$tests[0].php");
+require ("tests/22.php") #this is for directory traversal...
+
 $title = "generic title";
-$body = $key;
+if(strlen($error) > 0)
+  $body = $error;
+else if(strlen($body) == 0)
+  $body = "generic body";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

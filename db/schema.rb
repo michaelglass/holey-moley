@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100408133720) do
+ActiveRecord::Schema.define(:version => 20100409185040) do
 
   create_table "suites", :force => true do |t|
     t.integer  "top"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20100408133720) do
     t.float    "weight"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "key",        :limit => 10
   end
 
   create_table "tests", :force => true do |t|
