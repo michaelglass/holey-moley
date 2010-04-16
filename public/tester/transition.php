@@ -1,0 +1,46 @@
+<?php
+class Transition {
+  private $name, $source, $destination, $testable;
+  
+  public function __construct($name, $source, $destination, $testable)
+  {
+    $this->$name = $name;
+    if(is_a($source, "State") )
+      $this->$source = $source;
+    else
+      throw new Exception("Source must be object of class State");
+
+    if(is_a($destination, "State") )
+      $this->$destination = $destination;
+    else
+      throw new Exception("Destination must be object of class State");
+
+    if(is_a($testable, "iTestable") )
+      $this->$testable = $testable;
+    else
+      throw new Exception("Testable must be object of class iTestable");
+  }
+  
+  public function can_transition()
+  {
+    $can_transition = TRUE;
+    
+    $vars = array();
+    //add $_GET
+    $vars['GET'] = $_GET;
+    //add $_POST
+    $vars['POST'] = $_POST;
+    
+    //add $_url
+    $key = $_SERVER["REQUEST_URI"];
+    if(preg_match("/([a-z]{10,10})\/(.*)/", $key, $matches))
+      $url = $matches[2];
+    else
+      throw new Exception("Somehow the url is completely invalid!  yay!");
+    
+    $vars['STATIC'] = array('URL' => $url);
+    
+    return $can_transition;
+  } 
+}
+?>
