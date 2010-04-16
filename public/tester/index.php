@@ -42,6 +42,7 @@ else
 # else
 #   $error .= "Error preparing statement";
 
+
 $suite_id = '';
 
 $query = "SELECT suites.id FROM suites WHERE suites.key = '$key';";
