@@ -1,10 +1,14 @@
 <?php
 
 $last_transition = 'NULL'; //default
-$query = "SELECT transition_name FROM histories WHERE histories.suite_id = '$suite_id' ORDER BY created_at desc LIMIT 1";
+$query = "SELECT transition_name FROM histories WHERE histories.suite_id = '$suite_id' ORDER BY created_at desc LIMIT 1;";
+$error .= "[$query]";
 if($result = $db->query($query)) {
-  if($row = $result->fetch_row())
+  if(mysqli_num_rows($result) == 1 && $row = $result->fetch_row())
     $last_transition = $row[0];
+  else
+    $error .= "<br/>no history yet";
+  $error .= mysqli_num_rows($result);
 }
 else
   $error .= "<br/>backend error :(";
@@ -27,37 +31,41 @@ $finals      = array( "NULL"=>FALSE,
                       "STILL FANCILY DONE"=>TRUE);                      
 
 $state = $transitions[$last_transition];
-
-//transition completely based on url for directory traversal...
+$error .= "<br/>$state";
+// transition completely based on url for directory traversal...
 switch($state)
 {
   case 'start':
-    switch($url)
-    {
-      case preg_match("/../", $url):
-        $transition = "UP ONE LEVEL WITH STANDARD CHARS";
-        $body = "..<br>this is a fake file structure<br>fer serious<br>";
-        break;
-      case preg_match("/(%2e|\.){2,2}/", $url):
-        $transition = "UP ONE LEVEL WITH SPECIAL CHARS";
-        $body = "..<br>this is a fake file structure<br>fer serious<br>";
-      default:
-        $transition = "DO NOTHING";
+    error_log("state is start");
+    if( preg_match("/\.{2,2}/", $url) )
+    {    
+      $transition = "UP ONE LEVEL WITH STANDARD CHARS";
+      $body = "..<br>this is a fake file structure<br>fer serious<br>";
     }
-    break;
-  case 'simple_end':
-    switch($url)
+    else if (preg_match("/(%2e|\.){2,2}/", $url) )
     {
-      case preg_match("/(%2e|\.){2,2}/", $url):
+      $transition = "UP ONE LEVEL WITH SPECIAL CHARS";
+      $body = "..<br>this is a fake file structure<br>fer serious<br>";
+    }
+    else
+      $transition = "DO NOTHING";
+    break;
+
+  case 'simple end':
+  error_log("state is simple_end");
+      if(preg_match("/(%2e|\.){2,2}/", $url))
+      {
         $transition = "UP ONE LEVEL WITH SPECIAL CHARS";
         $body = "..<br>this is a fake file structure<br>fer serious<br>";
-        break;
-      default:
+      }      
+      else
+      {
         $transition = "STILL SIMPLY DONE";
         $body = "..<br>this is a fake file structure<br>fer serious<br>";
-    }
-  break;
+      }
+      break;
   case 'fancy end':
+    error_log("state is fancy end");  
     $transition = "STILL FANCILY DONE";
     $body = "..<br>this is a fake file structure<br>fer serious<br>";
 }
@@ -67,4 +75,5 @@ if(! $db->query($query))
   $error .= "<br/>backend error updating history :(";
 
 
+ 
 ?>
