@@ -4,27 +4,30 @@ class Transition {
   
   public function __construct($name, $source, $destination, $testable)
   {
-    $this->$name = $name;
+    $this->name = $name;
     if(is_a($source, "State") )
-      $this->$source = $source;
+      $this->source = $source;
     else
       throw new Exception("Source must be object of class State");
 
     if(is_a($destination, "State") )
-      $this->$destination = $destination;
+      $this->destination = $destination;
     else
       throw new Exception("Destination must be object of class State");
 
     if(is_a($testable, "iTestable") )
-      $this->$testable = $testable;
+      $this->testable = $testable;
     else
       throw new Exception("Testable must be object of class iTestable");
   }
   
-  public function can_transition()
+  public function can_transition($current_state)
   {
-    $can_transition = TRUE;
-    
+    //check source state vs source for this transition
+    if(! $current_state->is_equal_to($source))
+      return false;
+      
+    //generate vars array
     $vars = array();
     //add $_GET
     $vars['GET'] = $_GET;
@@ -39,8 +42,23 @@ class Transition {
       throw new Exception("Somehow the url is completely invalid!  yay!");
     
     $vars['STATIC'] = array('URL' => $url);
-    
-    return $can_transition;
-  } 
+        
+    return $testable->run_test($vars);
+  }
+  
+  public function source()
+  {
+    return $source;
+  }
+  
+  public function destination()
+  {
+    return $destination;
+  }
+  
+  public function name()
+  {
+    return $name;
+  }
 }
 ?>
