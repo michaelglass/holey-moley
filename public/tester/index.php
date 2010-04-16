@@ -8,10 +8,11 @@ $error = '';
 $body = '';
 
 $key = $_SERVER["REQUEST_URI"];
-if(preg_match("^/([a-z]{10,10})(.*)?/", $key, $matches))
+#expects a 10 digit key. /^([a-z]{10,10})(.*)/
+if(preg_match("/([a-z]{10,10})\/(.*)/", $key, $matches))
 {
-  $key = $matches[0];
-  $url = $matches[1];
+  $key = $matches[1];
+  $url = $matches[2];
 }
 else
   $error .= "No key found.";
@@ -43,39 +44,48 @@ else
 
 $suite_id = '';
 
-$query = "SELECT suite.id FROM suites WHERE suites.key = '$key'";
+$query = "SELECT suites.id FROM suites WHERE suites.key = '$key';";
 if($result = $db->query($query)) {
   while($row = $result->fetch_row())
     foreach ($row as $value)
       $suite_id = $value;
+      
+    $tests = array();
+
+    $query = "SELECT tests.id FROM tests WHERE tests.suite_id = $suite_id;";
+    if($result = $db->query($query)) {
+      while($row = $result->fetch_row())
+        foreach ($row as $value)
+          $tests[] = $value;
+
+
+        # 
+        # for each test, require tests/test.php which includes the FSM
+        # ... realistically, we should merge our FSMs for each test... but maybe we won't do that for this project...
+        # once we have the state machine loaded...
+        #now, just include first test...
+        # require("tests/$tests[0].php");
+          
+      if( isset($url) )
+        require ("tests/22.php"); #this is for directory traversal...
+          
+    }
+    else
+      $error .= "<br/>backend error retrieving suite :(";
+
 }
 else
-  $error .= "<br/>backend error :(";#$query;
-
-$tests = array();
-
-$query = "SELECT tests.id FROM tests WHERE tests.suite_id = '$suite_id'";
-if($result = $db->query($query)) {
-  while($row = $result->fetch_row())
-    foreach ($row as $value)
-      $tests[] = $value;
-}
-else
-  $error .= "<br/>backend error :(";
+  $error .= "<br/>invalid key ($key):(";#$query;
 
 
-
-
-
-# 
-# for each test, require tests/test.php which includes the FSM
-# ... realistically, we should merge our FSMs for each test... but maybe we won't do that for this project...
-# once we have the state machine loaded...
-#now, just include first test...
-# require("tests/$tests[0].php");
-require ("tests/22.php"); #this is for directory traversal...
 
 $db->close();
+
+
+
+
+
+
 
 $title = "generic title";
 if(strlen($error) > 0)
