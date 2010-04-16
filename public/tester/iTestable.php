@@ -26,7 +26,7 @@
         
         $passed = preg_match($test["pattern"], $subject);
         
-        $test_passes = $passed && $test["should pass"];
+        $test_passes = $passed == $test["should pass"];
         
         if(! $test_passes)
           break;
@@ -34,7 +34,7 @@
       return $test_passes;
     }
       
-    public function addSubTest($param_type, $param_name, $pattern, $should_pass = TRUE)
+    public function add_subtest($param_type, $param_name, $pattern, $should_pass = TRUE)
     {
       //validate input
       //TODO: VALIDATE INPUT

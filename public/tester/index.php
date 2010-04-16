@@ -12,7 +12,6 @@ $key = $_SERVER["REQUEST_URI"];
 if(preg_match("/([a-z]{10,10})\/(.*)/", $key, $matches))
 {
   $key = $matches[1];
-  $url = $matches[2];
 }
 else
   $error .= "No key found.";
@@ -67,9 +66,8 @@ if($result = $db->query($query)) {
         #now, just include first test...
         # require("tests/$tests[0].php");
           
-      if( isset($url) )
-        require ("tests/22.php"); #this is for directory traversal...
-          
+      require_once ("tests/22.php"); #this is for directory traversal...
+      $body = $twenty_two->run($db, $suite_id);
     }
     else
       $error .= "<br/>backend error retrieving suite :(";

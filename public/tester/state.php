@@ -1,16 +1,21 @@
 <?php
 class State{
-  private $name, $content, $links, $form, $title;
+  private $name, $content, $links, $form, $title, $final_flag;
   
-  public function __construct($name, $content, $links, $form, $title = NULL)
+  public function __construct($name, $final_flag = false, $content = "", $links = NULL, $form = NULL, $title = NULL)
   {
+    $this->final_flag = $final_flag;
     $this->name = $name; 
     $this->content = $content;
-    if(is_array($links))
+    if(is_null($links))
+      $this->links = array();
+    else if(is_array($links))
       $this->links = $links;
     else
       throw new Exception("Wrong inputs.");
-    if(is_a($form, 'Form') )
+    if(is_null($form))
+      $this->form = NULL;
+    else if(is_a($form, 'Form') )
       $this->form = $form;
     else
       throw new Exception("Wrong inputs.");
@@ -39,10 +44,14 @@ class State{
   <body>";
   $output .= "<p>$this->content</p>";
   $links_output = '';
-  foreach($this->links as $link_name => $link_url)
-    $links_output .= "<a href=\"$link_url\">$link_name</a><br/>";
-  $output .= "<p>$links_output</p>";
-  $output .= $this->form->display();
+  if(count($this->links) > 0 )
+  {
+    foreach($this->links as $link_name => $link_url)
+      $links_output .= "<a href=\"$link_url\">$link_name</a><br/>";
+    $output .= "<p>$links_output</p>";
+  }
+  if(!is_null($this->form))
+    $output .= $this->form->display();
   $output .= "  </body>
 </html>";
     return $output;
@@ -54,6 +63,7 @@ class State{
   }
   
   public function name() {return $this->name; }
+  public function is_final() { return $this->final_flag; }
 }
 
 class Form{

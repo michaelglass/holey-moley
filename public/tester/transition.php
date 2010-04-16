@@ -1,4 +1,7 @@
 <?php
+require_once('state.php');
+require_once('itestable.php');
+
 class Transition {
   private $name, $source, $destination, $testable;
   
@@ -24,7 +27,7 @@ class Transition {
   public function can_transition($current_state)
   {
     //check source state vs source for this transition
-    if(! $current_state->is_equal_to($source))
+    if(! $current_state->is_equal_to($this->source))
       return false;
       
     //generate vars array
@@ -43,22 +46,22 @@ class Transition {
     
     $vars['STATIC'] = array('URL' => $url);
         
-    return $testable->run_test($vars);
+    return $this->testable->run_test($vars);
   }
   
   public function source()
   {
-    return $source;
+    return $this->source;
   }
   
   public function destination()
   {
-    return $destination;
+    return $this->destination;
   }
   
   public function name()
   {
-    return $name;
+    return $this->name;
   }
 }
 ?>
