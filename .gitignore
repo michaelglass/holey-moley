@@ -2,3 +2,4 @@
 *.log
 .DS_Store
 database.yml
+static_data/nvd/nvdcve-2.0-modified*
