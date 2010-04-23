@@ -39,8 +39,11 @@ class Transition {
     
     //add $_url
     $key = $_SERVER["REQUEST_URI"];
-    if(preg_match("/([a-z]{10,10})\/(.*)/", $key, $matches))
-      $url = $matches[2];
+    if(preg_match("/([a-z]{10,10})(\/(.*))?/", $key, $matches))
+      if(isset($matches[2]))
+        $url = $matches[2];
+      else
+        $url = "";
     else
       throw new Exception("Somehow the url is completely invalid!  yay!");
     

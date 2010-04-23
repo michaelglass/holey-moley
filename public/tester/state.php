@@ -86,8 +86,8 @@ class Form{
   {
     $output = "\n\n<p><form method='".($this->is_POST? 'POST' : 'GET')."' action='$this->action'>\n";
     foreach($this->inputs as $input_name)
-      $output .= "<input type='text' name='$input_name'/><br/>\n"  ;
-    $output .= "</form></p>\n";
+      $output .= "<input type='text' name='$input_name'/><br/>\n";
+    $output .= "<input type=\"submit\"/></form></p>\n";
     return $output;
   }
 }

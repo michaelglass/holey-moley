@@ -11,6 +11,8 @@
     public function run_test($vars)
     {
       $test_passes = true;
+      $unique_id_failed = array();
+      $unique_id_passed = array();
       foreach( $this->sub_tests as $test )
       {
         //vars is a hash of all testable variables
@@ -27,14 +29,31 @@
         $passed = preg_match($test["pattern"], $subject);
         
         $test_passes = $passed == $test["should pass"];
-        
-        if(! $test_passes)
+
+        $unique_id = $test['unique id'];        
+        if($unique_id != null)
+        {
+          if(! $test_passes )
+          {
+            if(! isset($unique_id_passed[$unique_id]))
+              $unique_id_failed[$unique_id = true];
+          }
+          else # test did pass, add it to passed, and remove all failures...
+          {
+            unset($unique_id_failed[$unique_id]);
+            $unique_id_passed[$unique_id] = true;
+          }
+        }
+        else if(! $test_passes)
           break;
       }
+      if($test_passes)
+        $test_passes = count($unique_id_failed) == 0;
+
       return $test_passes;
     }
       
-    public function add_subtest($param_type, $param_name, $pattern, $should_pass = TRUE)
+    public function add_subtest($param_type, $param_name, $pattern, $should_pass = TRUE, $unique_id = NULL)
     {
       //validate input
       //TODO: VALIDATE INPUT
@@ -43,7 +62,8 @@
       $this->sub_tests[] = array( "param type" => $param_type,
                 "param name" => $param_name, 
                 "pattern" => $pattern,
-                "should pass" => $should_pass );
+                "should pass" => $should_pass,
+                "unique id" => $unique_id);
       
     }
   }

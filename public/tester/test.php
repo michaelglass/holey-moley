@@ -41,7 +41,7 @@ class Test {
     $this->save_transition($transition);
     
     //next state
-    $state = $transition->destination();
+    $this->state = $transition->destination();
     
     return $this->state->display();
   }

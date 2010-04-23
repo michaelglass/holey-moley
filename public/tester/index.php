@@ -9,7 +9,7 @@ $body = '';
 
 $key = $_SERVER["REQUEST_URI"];
 #expects a 10 digit key. /^([a-z]{10,10})(.*)/
-if(preg_match("/([a-z]{10,10})\/(.*)/", $key, $matches))
+if(preg_match("/([a-z]{10,10})(\/(.*))?/", $key, $matches))
 {
   $key = $matches[1];
 }
