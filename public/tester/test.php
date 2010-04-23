@@ -25,7 +25,7 @@ class Test {
     $this->create_transition_hashes();
   }
     
-  public function run($db, $suite_id)
+  public function run($db, $suite_id, $suite_key)
   {
     if(is_a($db, 'mysqli') && !$db->connect_error)
       $this->db = $db;
@@ -43,7 +43,7 @@ class Test {
     //next state
     $this->state = $transition->destination();
     
-    return $this->state->display();
+    return $this->state->display($suite_key);
   }
   
   private function create_transition_hashes()
@@ -88,7 +88,7 @@ class Test {
           $next_transition = $transition;
         else
         {
-           throw new Exception("Broken state machine:  More than one possible transitions from " . $state->name() . 'with current params');
+           throw new Exception("Broken state machine:  More than one possible transitions from " . $this->state->name() . 'with current params. Both ' . $next_transition->name() . ' and '. $transition->name(). " are valid candidates");
            //TODO: DUMP ENV!!
          }  
        }

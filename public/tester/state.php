@@ -28,7 +28,7 @@ class State{
   
   public function add_link($link_name, $link_url) { $this->links[] = array($link_name => $link_url); }
     
-  public function display()
+  public function display($suite_key)
   {
     $output = 
 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -51,7 +51,7 @@ class State{
     $output .= "<p>$links_output</p>";
   }
   if(!is_null($this->form))
-    $output .= $this->form->display();
+    $output .= $this->form->display($suite_key);
   $output .= "  </body>
 </html>";
     return $output;
@@ -75,16 +75,16 @@ class Form{
     if(is_array($inputs))
       $this->inputs = $inputs;
     else
-      throw new Exception("Wrong inputs.");
+      $this->inputs = array();
     
     $this->is_POST = $is_POST;
   }
   
   public function add_input($input_name) { $this->inputs[] = $input_name; }
   
-  public function display()
+  public function display($suite_key)
   {
-    $output = "\n\n<p><form method='".($this->is_POST? 'POST' : 'GET')."' action='$this->action'>\n";
+    $output = "\n\n<p><form method='".($this->is_POST? 'POST' : 'GET')."' action='/$suite_key/$this->action'>\n";
     foreach($this->inputs as $input_name)
       $output .= "<input type='text' name='$input_name'/><br/>\n";
     $output .= "<input type=\"submit\"/></form></p>\n";

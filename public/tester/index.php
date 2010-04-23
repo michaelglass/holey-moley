@@ -66,8 +66,8 @@ if($result = $db->query($query)) {
         #now, just include first test...
         # require("tests/$tests[0].php");
           
-      require_once ("tests/22.php"); #this is for directory traversal...
-      $body = $twenty_two->run($db, $suite_id);
+      require_once ("tests/89.php"); #this is for directory traversal...
+      $body = $test_89->run($db, $suite_id, $key);
     }
     else
       $error .= "<br/>backend error retrieving suite :(";

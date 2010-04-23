@@ -13,7 +13,7 @@
   $simple_pattern = "/\.{2,2}/";
   $fancy_pattern = "/(%2e){2,2}/";
 
-  $anything_pattern = "/.*/";
+  // $anything_pattern = "/.*/";
   
   $do_nothing_test = new RegExTester();
   $do_nothing_test->add_subtest('STATIC', 'URL', $simple_pattern, FALSE);
@@ -30,7 +30,7 @@
   $fancy_test->add_subtest('STATIC', 'URL', $fancy_pattern);
 
   $stay_fancy_test = new RegExTester();
-  $stay_fancy_test->add_subtest('STATIC', 'URL', $anything_pattern);
+  // $stay_fancy_test->add_subtest('STATIC', 'URL', $anything_pattern);
 
   $do_nothing = new Transition("DO NOTHING", $start_state, $start_state, $do_nothing_test);
   $get_simple = new Transition("UP ONE LEVEL WITH STANDARD CHARS", $start_state, $simple_end, $simple_test);
@@ -42,7 +42,7 @@
   $stay_fancy = new Transition("STILL FANCILY DONE", $fancy_end, $fancy_end, $stay_fancy_test);
   
   
-  $twenty_two = new Test( array( $do_nothing, $get_simple, $get_fancy, 
+  $test_22 = new Test( array( $do_nothing, $get_simple, $get_fancy, 
                                 $stay_simple, $get_fancier,
                                 $stay_fancy),
                                 $start_state );
