@@ -3,7 +3,7 @@ session_start();
 #connect to database
 
 #TODO: READ FROM database.conf file.
-$db = new mysqli('localhost','root','','holey_moley_dev'); 
+$db = new mysqli('localhost','root','G4LVqrqQGQVWjEPT','holey_moley_dev'); 
 $error = '';
 $body = '';
 

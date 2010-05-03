@@ -23,6 +23,7 @@ $do_absolutely_nothing_pattern = "/login\.php/i";
 
 $do_absolutely_nothing_test = new RegExTester();
 $do_absolutely_nothing_test->add_subtest('STATIC', 'URL', $do_absolutely_nothing_pattern, false);
+
 $do_absolutely_nothing_test->add_subtest('POST', 'username', $blind_pattern, false);
 $do_absolutely_nothing_test->add_subtest('POST', 'username', $simple_pattern, false);
 $do_absolutely_nothing_test->add_subtest('POST', 'username', $fancy_pattern, false);
@@ -71,26 +72,29 @@ $fancy_test = new RegExTester();
 $fancy_test->add_subtest('STATIC', 'URL', $do_absolutely_nothing_pattern);
 $fancy_test->add_subtest('POST', 'username', $fancy_pattern, true, "UNIQUE_FANCY");
 $fancy_test->add_subtest('POST', 'password', $fancy_pattern, true, "UNIQUE_FANCY");
-
 $stay_fancy_test = new RegExTester();
 // $stay_fancy_test->add_subtest()
+
 $do_absolutely_nothing = new Transition("DO ABSOLUTELY NOTHING", $start_state, $start_state, $do_absolutely_nothing_test);
 $do_nothing = new Transition("DO NOTHING", $start_state, $failed_login_state, $do_nothing_test);
 
 $blind_attack = new Transition("BLIND ATTACK", $start_state, $blind_state, $blind_test );
-$blind_attack2 = new Transition("BLIND ATTACK2", $failed_login_state, $blind_state, $blind_test );
-$stay_blind = new Transition("STAY BLIND", $blind_state, $blind_state, $stay_blind_test );
-
 $simple_attack = new Transition("SIMPLE ATTACK", $start_state, $simple_state, $simple_test);
-$simple_attack2 = new Transition("SIMPLE ATTACK2", $failed_login_state, $simple_state, $simple_test);
-$stay_simple = new Transition("STAY SIMPLE", $simple_state, $simple_state, $stay_simple_test);
-$blind_to_simple = new Transition("GET SIMPLE", $blind_state, $simple_state, $simple_test);
-
 $fancy_attack = new Transition("FANCY ATTACK", $start_state, $fancy_state, $fancy_test);
+
+$blind_attack2 = new Transition("BLIND ATTACK2", $failed_login_state, $blind_state, $blind_test );
+$simple_attack2 = new Transition("SIMPLE ATTACK2", $failed_login_state, $simple_state, $simple_test);
 $fancy_attack2 = new Transition("FANCY ATTACK2", $failed_login_state, $fancy_state, $fancy_test);
-$stay_fancy = new Transition("STAY FANCY", $fancy_state, $fancy_state, $stay_fancy_test);
+
+
+$stay_blind = new Transition("STAY BLIND", $blind_state, $blind_state, $stay_blind_test );
+$blind_to_simple = new Transition("GET SIMPLE", $blind_state, $simple_state, $simple_test);
 $blind_to_fancy = new Transition("BLIND TO FANCY", $blind_state, $fancy_state, $fancy_test);
+
+$stay_simple = new Transition("STAY SIMPLE", $simple_state, $simple_state, $stay_simple_test);
 $simple_to_fancy = new Transition("SIMPLE TO FANCY", $simple_state, $fancy_state, $fancy_test);
+
+$stay_fancy = new Transition("STAY FANCY", $fancy_state, $fancy_state, $stay_fancy_test);
 
 $test_89 = new Test( array(  $do_absolutely_nothing, 
                                 $do_nothing, 

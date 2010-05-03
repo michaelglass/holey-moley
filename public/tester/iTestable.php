@@ -28,7 +28,7 @@
           $subject = $vars[$test["param type"]][$test["param name"]];
         else
           $subject = '';
-          
+        
         $passed = preg_match($test["pattern"], $subject);
         
         $test_passes = $passed == $test["should pass"];
@@ -36,23 +36,26 @@
         $unique_id = $test['unique id'];        
         if($unique_id != null)
         {
-          if(! $test_passes )
-          {
-            if(! isset($unique_id_passed[$unique_id]))
-              $unique_id_failed[$unique_id] = true;
-          }
-          else # test did pass, add it to passed, and remove all failures...
+          if( $test_passes )
           {
             unset($unique_id_failed[$unique_id]);
             $unique_id_passed[$unique_id] = true;
+          }
+          else
+          {
+            if( isset($unique_id_passed[$unique_id]))
+              $test_passes = true;
+            else
+              $unique_id_failed[$unique_id] = true;
           }
         }
         else if(! $test_passes)
           break;
       }
       if($test_passes)
+      {
         $test_passes = count($unique_id_failed) == 0;
-
+      }
       return $test_passes;
     }
       

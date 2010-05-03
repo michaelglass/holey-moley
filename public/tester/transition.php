@@ -26,9 +26,9 @@ class Transition {
   
   public function can_transition($current_state)
   {
-    //check source state vs source for this transition
-    if(! $current_state->is_equal_to($this->source))
-      return false;
+    // //check source state vs source for this transition
+    // if(! $current_state->is_equal_to($this->source))
+    //   return false;
       
     //generate vars array
     $vars = array();

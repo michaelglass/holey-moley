@@ -90,13 +90,21 @@ class Test {
         {
            throw new Exception("Broken state machine:  More than one possible transitions from " . $this->state->name() . 'with current params. Both ' . $next_transition->name() . ' and '. $transition->name(). " are valid candidates");
            //TODO: DUMP ENV!!
-         }  
-       }
+        }  
+      }
     
     
     if(!isset($next_transition))
-      throw new Exception("Broken state machine, no matching transition from ". $this->state->name());
-      
+    {
+      $exception ="Broken state machine, no matching transition from ". $this->state->name() . "(available states: ";
+      foreach($this->possible_transitions[$this->state->name()] as $transition)
+      {
+        $exception .= $transition->name() . ", ";
+      }
+      $exception .= ")";
+      throw new Exception($exception);
+     
+     } 
     return $next_transition;
   }
   
