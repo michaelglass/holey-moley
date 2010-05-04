@@ -76,7 +76,13 @@ $stay_fancy_test = new RegExTester();
 // $stay_fancy_test->add_subtest()
 
 $do_absolutely_nothing = new Transition("DO ABSOLUTELY NOTHING", $start_state, $start_state, $do_absolutely_nothing_test);
+
+$fail_again = new Transition("DO NOTHING AGAIN", $failed_login_state, $failed_login_state, $do_nothing_test);
+$unfail = new Transition("BACK TO UNFAILED", $failed_login_state, $start_state, $do_absolutely_nothing_test);
+
 $do_nothing = new Transition("DO NOTHING", $start_state, $failed_login_state, $do_nothing_test);
+
+
 
 $blind_attack = new Transition("BLIND ATTACK", $start_state, $blind_state, $blind_test );
 $simple_attack = new Transition("SIMPLE ATTACK", $start_state, $simple_state, $simple_test);
@@ -106,7 +112,7 @@ $test_89 = new Test( array(  $do_absolutely_nothing,
                                 $fancy_attack, $fancy_attack2,
                                 $stay_fancy,
                                 $blind_to_fancy,
-                                $simple_to_fancy),
+                                $simple_to_fancy, $fail_again, $unfail),
                       $start_state );
 
 
